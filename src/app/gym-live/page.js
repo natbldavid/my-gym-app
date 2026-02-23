@@ -391,11 +391,20 @@ export default function GymLivePage() {
                     const isAbs = ex.category === "Abs";
 
                     return (
-                      <div key={ex.exercise_id} className="rounded-2xl border p-4">
-                        <div className="text-sm font-bold text-gray-800">{ex.exercise_name}</div>
-                        <div className="mt-1 text-xs font-semibold text-gray-500">
-                          {ex.category} · {ex.reps}
-                        </div>
+<div key={ex.exercise_id} className="rounded-2xl border p-4">
+  <div className="text-sm font-bold text-gray-800">{ex.exercise_name}</div>
+
+  {/* NEW: Current Weight line */}
+  <div className="mt-1 text-xs font-semibold text-gray-500">
+    CurrentWeight:{" "}
+    <span className="font-bold text-gray-700">
+      {ex.current_weight == null ? "—" : `${ex.current_weight}kg`}
+    </span>
+  </div>
+
+  <div className="mt-1 text-xs font-semibold text-gray-500">
+    {ex.category} · {ex.reps}
+  </div>
 
                         <div className="mt-3 space-y-2">
                           {[1, 2, 3].map((setNo) => (
