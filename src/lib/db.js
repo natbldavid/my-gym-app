@@ -1,18 +1,28 @@
-import { kv } from "@vercel/kv";
+import { Redis } from "@upstash/redis";
 import { initialDb } from "./initial-db";
 
-const DB_KEY = "my-gym-db"; // single JSON blob key
+const DB_KEY = "my-gym-db";
+
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
 
 export async function getDb() {
-  const db = await kv.get(DB_KEY);
-  if (db) return db;
+  const db = await redis.get(DB_KEY);
 
-  // First run: seed with your initial JSON
-  await kv.set(DB_KEY, initialDb);
+  if (db && typeof db === "object") return db;
+
+  // first run: seed database
+  await redis.set(DB_KEY, initialDb);
   return initialDb;
 }
 
 export async function saveDb(nextDb) {
-  await kv.set(DB_KEY, nextDb);
+  if (!nextDb || typeof nextDb !== "object") {
+    throw new Error("saveDb: nextDb must be an object");
+  }
+
+  await redis.set(DB_KEY, nextDb);
   return nextDb;
 }

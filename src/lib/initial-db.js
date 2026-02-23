@@ -4,6 +4,7 @@ export const initialDb = {
     passcode: "123654",
     updated_at: "2026-02-20T10:15:00.000Z",
   },
+  gym_live_draft: null,
   gym_days_template: [ 
     {
       "day_number": 1,
